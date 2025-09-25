@@ -1,12 +1,14 @@
 import User from "../models/user.model.js"
-import mongoose from "mongoose"
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+
+
+
 export const signup = async (req, res) => {
     try {
-        const { name, email, password } = req.body
+        const { firstName,lastName, email, password } = req.body
 
-        if (!name || !email || !password) {
+        if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({
                 message: "All fields are required"
             })
@@ -22,12 +24,13 @@ export const signup = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10)
 
         const user = await User.create({
-            name,
-            email,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
             password: hashedPassword
         })
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' })
+        const token = jwt.sign({ id: user._id }, process.env.JWT_USER_SECRET, { expiresIn: '1h' })
 
         return res.status(200).json({
             message: "User created successfully",
@@ -41,6 +44,8 @@ export const signup = async (req, res) => {
         })
     }
 }
+
+
 
 export const signin = async (req, res) => {
     try {
@@ -68,7 +73,7 @@ export const signin = async (req, res) => {
             })
         }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' })
+        const token = jwt.sign({ id: user._id }, process.env.JWT_USER_SECRET, { expiresIn: '1h' })
 
         return res.status(200).json({
             message: "User logged in successfully",

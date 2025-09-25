@@ -21,8 +21,8 @@ async function databaseConnection() {
 databaseConnection()
 
 app.use('/api/v1/user', userRoutes) 
-app.use('/api/v1/admin', userRoutes) 
-app.use('/api/v1/course', adminRoutes) 
+app.use('/api/v1/admin', adminRoutes) 
+app.use('/api/v1/course', courseRoutes) 
 
 app.listen(5000, () => {
     console.log('Server is running on port 5000')
